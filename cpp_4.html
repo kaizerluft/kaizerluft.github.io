@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>4 C++ LIST</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="menu"></div>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<div class="text">
+		<br>
+		<br>
+		<mark>4 C++ LIST</mark><br>
+		<br>
+		<br>
+		<b>list</b> – структура данных, которая построена на двусвязных списках, т. е. каждый элемент списка знает только о предыдущем и о следующем элементах<br>
+		<br>
+		<br>
+		<b>Подключение заголовочного файла list</b><br>
+		<span class="code">#include &lt;list&gt;</span><br>
+		<br>
+		<br>
+		<b>Объявление и инициализация списка</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">list&lt;int&gt; L;</span></td>
+				<td>– объявить список</td>
+			</tr>
+			<tr>
+				<td><span class="code">list&lt;int&gt; L(N);</span></td>
+				<td>– объявить нулевой список размером N</td>
+			</tr>
+			<tr>
+				<td><span class="code">list&lt;int&gt; L(N, Value);</span></td>
+				<td>– объявить список размером N со значениями Value</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		У двусвязного списка отсутсвуют индексы, вместо них используются итераторы<br>
+		<br>
+		<br>
+		<b>Арифметические операторы</b><br>
+		<table width="100%">
+			<tr>
+				<td>=</td>
+				<td>– присвоить значение одного списка другому</td>
+			</tr>
+			<tr>
+				<td>==; !=</td>
+				<td>– сравнить два списка поэлементно</td>
+			</tr>
+			<tr>
+				<td><; >; <=; >=</td>
+				<td>– сравнить два списка лексикографически</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<b>Методы list</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">L.front()</span></td>
+				<td>– вернуть первый элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.back()</span></td>
+				<td>– вернуть последний элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.push_front(Value)</span></td>
+				<td>– добавить элемент в начало</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.push_back(Value)</span></td>
+				<td>– добавить элемент в конец</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.pop_front()</span></td>
+				<td>– удалить первый элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.pop_back()</span></td>
+				<td>– удалить последний элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.size()</span></td>
+				<td>– вернуть размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.clear()</span></td>
+				<td>– очистить</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.empty()</span></td>
+				<td>– true, если пуст</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.begin()</span></td>
+				<td>– вернуть итератор начала</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.end()</span></td>
+				<td>– вернуть итератор конца</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.insert(It, Value)</span></td>
+				<td>– вставить в итератор элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.insert(It, N, Value)</span></td>
+				<td>– вставить в итератор элемент N раз</td>
+			</tr>
+			<tr>
+				<td><span class="code">L1.merge(L2)</span></td>
+				<td>– добавить список</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.erase(It)</span></td>
+				<td>– удалить элемент с итератора</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.erase(It1, It2)</span></td>
+				<td>– удалить элементы из диапазона итераторов</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.remove(Value)</span></td>
+				<td>– удалить элементы со значением</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.remove_if(Condition)</span></td>
+				<td>– удалить элементы с условием</td>
+			</tr>
+			<tr>
+				<td><span class="code">L.unique()</span></td>
+				<td>– удалить повторяющиеся элементы</td>
+			</tr>
+			<tr>
+				<td><span class="code">L1.swap(L2)</span></td>
+				<td>– обменять значения</td>
+			</tr>
+		</table>
+	</div>
+</body>

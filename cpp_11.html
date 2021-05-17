@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>11 C++ WSTRING +RUS</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="menu"></div>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<div class="text">
+		<br>
+		<br>
+		<mark>11 C++ WSTRING +RUS</mark><br>
+		<br>
+		<br>
+		<b>wstring</b> – структура данных «широких» локализованных символов, представляющих интернациональную кодировку символами Unicode<br>
+		<br>
+		<br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">setlocale(LC_ALL, ".866");</span></td>
+				<td>– добавить кодировку с русскими символами</td>
+			</tr>
+			<tr>
+				<td><span class="code">wstring Wstr = L"текст";</span></td>
+				<td>– объявить и инициализировать широкую строку</td>
+			</tr>
+			<tr>
+				<td><span class="code">wcin >> Wstr;</span></td>
+				<td>– ввести широкую строку</td>
+			</tr>
+			<tr>
+				<td><span class="code">wcout << Wstr;</span></td>
+				<td>– вывести широкую строку</td>
+			</tr>
+			<tr>
+				<td><span class="code">wcout << L"текст";</span></td>
+				<td>– вывести русский текст</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<span class="code">
+			wstring Buff;<br>
+			wifstream Fin("file.txt");<br>
+			Fin.imbue(locale("Russian"));<br>
+			getline(Fin, Buff);<br>
+		</span>
+		– считать с файла "file.txt" строку с русским текстом<br>
+	</div>
+</body>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>6 C++ QUEUE</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="menu"></div>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<div class="text">
+		<br>
+		<br>
+		<mark>6 C++ QUEUE</mark><br>
+		<br>
+		<br>
+		<b>queue</b> – структура данных, в которой доступ осуществляется только к самому раннее добавленому элементу<br>
+		Новые элементы добавляются в конец очереди, а удаляются из начала очереди<br>
+		Адаптер queue может быть основан на deque или list<br>
+		<br>
+		<br>
+		<b>Подключение заголовочного файла queue</b><br>
+		<span class="code">#include &lt;queue&gt;</span><br>
+		<br>
+		<br>
+		<b>Объявление и инициализация очереди</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">queue&lt;int&gt; Qu;</span></td>
+				<td>– объявить очередь (по умолчанию на основе deque)</td>
+			</tr>
+			<tr>
+				<td><span class="code">queue&lt;int, list&lt;int&gt;&gt; Qu;</span></td>
+				<td>– объявить очередь на основе list</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<b>Арифметические операторы</b><br>
+		<table width="100%">
+			<tr>
+				<td>=</td>
+				<td>– присвоить значение одной очереди другой</td>
+			</tr>
+			<tr>
+				<td>==; !=</td>
+				<td>– сравнить две очереди поэлементно</td>
+			</tr>
+			<tr>
+				<td><; >; <=; >=</td>
+				<td>– сравнить две очереди лексикографически</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<b>Методы queue</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">Qu.front()</span></td>
+				<td>– вернуть первый элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">Qu.back()</span></td>
+				<td>– вернуть последний элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">Qu.push(Value)</span></td>
+				<td>– добавить элемент в конец очереди</td>
+			</tr>
+			<tr>
+				<td><span class="code">Qu.emplace(Value)</span></td>
+				<td>– добавить элемент в конец очереди</td>
+			</tr>
+			<tr>
+				<td><span class="code">Qu.pop()</span></td>
+				<td>– удалить первый элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">Qu.size()</span></td>
+				<td>– вернуть размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">Qu.empty()</span></td>
+				<td>– true, если пуст</td>
+			</tr>
+			<tr>
+				<td><span class="code">Qu.swap()</span></td>
+				<td>– обменять значения</td>
+			</tr>
+		</table>
+	</div>
+</body>

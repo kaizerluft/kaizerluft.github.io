@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>9 C++ MAP MULTIMAP</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="menu"></div>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<div class="text">
+		<br>
+		<br>
+		<mark>9 C++ MAP MULTIMAP</mark><br>
+		<br>
+		<br>
+		<b>map</b> – ассоциативный контейнер, который работает по принципу – [ключ – значение] без повторяющихся ключей<br>
+		<b>multimap</b> – ассоциативный контейнер, который работает по принципу – [ключ – значение] с возможностью повторения ключей<br>
+		<br>
+		<br>
+		<b>Подключение заголовочного файла map</b><br>
+		<span class="code">#include &lt;map&gt;</span><br>
+		<br>
+		<br>
+		<b>Объявление и инициализация словаря и мультисловаря</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">map&lt;int, string&gt; M;</span></td>
+				<td>– объявить словарь</td>
+			</tr>
+			<tr>
+				<td><span class="code">multimap&lt;int, string&gt; Mm;</span></td>
+				<td>– объявить мультисловарь</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<span class="code">M[0] = "text";</span><br>
+		– присвоить значение по ключу<br>
+		Если обратиться к несуществующему ключу и присвоить ему значение, то в словаре добавиться новая пара<br>
+		<br>
+		<br>
+		<span class="code">M[0].First</span> / <span class="code">M[0].Second</span><br>
+		<span class="code">It->First</span> / <span class="code">It->Second</span><br>
+		– обратиться к ключу / значению<br>
+		Невозможно изменить значение ключа при обращении через итератор <span class="code">It->First</span><br>
+		<br>
+		<br>
+		<b>Арифметические операторы</b><br>
+		<table width="100%">
+			<tr>
+				<td>=</td>
+				<td>– присвоить значение одного словаря другому</td>
+			</tr>
+			<tr>
+				<td>==; !=</td>
+				<td>– сравнить два словаря поэлементно</td>
+			</tr>
+			<tr>
+				<td><; >; <=; >=</td>
+				<td>– сравнить два словаря лексикографически</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<b>Методы map</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">M.at(I)</span></td>
+				<td>– обратиться к I-му элементу с генерацией исключения</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.size()</span></td>
+				<td>– вернуть размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.clear()</span></td>
+				<td>– очистить</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.empty()</span></td>
+				<td>– true, если пуст</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.begin()</span></td>
+				<td>– вернуть итератор начала</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.end()</span></td>
+				<td>– вернуть итератор конца</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.emplace(Key, Value)</span></td>
+				<td>– добавить элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.insert(make_pair(Key, Value))</span></td>
+				<td>– вставить элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.insert(pair&lt;int, int&gt;(Key, Value))</span></td>
+				<td>– вставить элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.insert(It, make_pair(Key, Value))</span></td>
+				<td>– вставить в итератор элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.insert(It1, It2)</span></td>
+				<td>– вставить элементы из диапазона итераторов</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.erase(Key)</span></td>
+				<td>– удалить элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.erase(It)</span></td>
+				<td>– удалить элемент с итератора</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.erase(It1, It2)</span></td>
+				<td>– удалить элементы из диапазона итераторов</td>
+			</tr>
+			<tr>
+				<td><span class="code">M1.swap(M2)</span></td>
+				<td>– обменять значения</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.count(Key)</span></td>
+				<td>– вернуть количество элементов</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.find(Key)</span></td>
+				<td>– вернуть итератор встречи элемента</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.lower_bourd(Key)</span></td>
+				<td>– вернуть итератор встречи элемента большее или равное ключу</td>
+			</tr>
+			<tr>
+				<td><span class="code">M.upper_bound(Key)</span></td>
+				<td>– вернуть итератор встречи элемента большее ключу</td>
+			</tr>
+		</table>
+	</div>
+</body>

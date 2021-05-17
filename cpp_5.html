@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>5 C++ STACK</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="menu"></div>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<div class="text">
+		<br>
+		<br>
+		<mark>5 C++ STACK</mark><br>
+		<br>
+		<br>
+		<b>stack</b> – структура данных, в которой доступ осуществляется только к последнему добавленному элементу<br>
+		<br>
+		<br>
+		<b>Подключение заголовочного файла stack</b><br>
+		<span class="code">#include &lt;stack&gt;</span><br>
+		<br>
+		<br>
+		<b>Объявление и инициализация стека</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">stack&lt;int&gt; St;</span></td>
+				<td>– объявить стек (по умолчанию на основе deque)</td>
+			</tr>
+			<tr>
+				<td><span class="code">stack&lt;int, vector&lt;int&gt;&gt; St;</span></td>
+				<td>– объявить стек на основе vector</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		Стек не работает с итераторами<br>
+		<br>
+		<br>
+		<b>Арифметические операторы</b><br>
+		<table width="100%">
+			<tr>
+				<td>=</td>
+				<td>– присвоить значение одного стека другому</td>
+			</tr>
+			<tr>
+				<td>==; !=</td>
+				<td>– сравнить два стека поэлементно</td>
+			</tr>
+			<tr>
+				<td><; >; <=; >=</td>
+				<td>– сравнить два стека лексикографически</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<b>Методы stack</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">St.peek(I)</span></td>
+				<td>– обратиться к I-му элементу стека от вершины</td>
+			</tr>
+			<tr>
+				<td><span class="code">St.top()</span></td>
+				<td>– вернуть верхний элемент стека</td>
+			</tr>
+			<tr>
+				<td><span class="code">St.push(Value)</span></td>
+				<td>– добавить элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">St.emplace(Value)</span></td>
+				<td>– добавить элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">St.poop()</span></td>
+				<td>– удалить элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">St.size()</span></td>
+				<td>– вернуть размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">St.empty()</span></td>
+				<td>– true, если пуст</td>
+			</tr>
+			<tr>
+				<td><span class="code">St1.swap(St2)</span></td>
+				<td>– обменять значения</td>
+			</tr>
+		</table>
+	</div>
+</body>
