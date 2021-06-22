@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>7 C++ DEQUE</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<script language="JavaScript" src="menu.js"></script>
+	<div class="text">
+		<br>
+		<br>
+		<mark>7 C++ DEQUE</mark><br>
+		<br>
+		<br>
+		<b>deque</b> – структура данных, которая позволяет добавлять элементы и в конец, и в начало, а также удалять элементы из конца и из начала<br>
+		<br>
+		<br>
+		<b>Подключение заголовочного файла deque</b><br>
+		<span class="code">#include &lt;deque&gt;</span><br>
+		<br>
+		<br>
+		<b>Объявление и инициализация дека</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">deque&lt;int&gt; Dq;</span></td>
+				<td>– объявить дек</td>
+			</tr>
+			<tr>
+				<td><span class="code">deque&lt;int&gt; Dq(N);</span></td>
+				<td>– объявить нулевой дек размером N</td>
+			</tr>
+			<tr>
+				<td><span class="code">deque&lt;int&gt; Dq(N, Value);</span></td>
+				<td>– объявить дек размером N со значениями Value</td>
+			</tr>
+			<tr>
+				<td><span class="code">deque&lt;deque&lt;int&gt;&gt; Dq;</span></td>
+				<td>– объявить двумерный дек</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		К отдельным элементам дека можно обращаться по индексу<br>
+		Где <span class="code">Dq[0]</span> – первый элемент дека; <span class="code">Dq[0][0]</span> – первый элемент двумерного дека<br>
+		<br>
+		<br>
+		<span class="code">deque&lt;deque&lt;int&gt;&gt; Dq(N, deque&lt;int&gt;(M));</span><br>
+		– выделить память двумерному деку размером N×M<br>
+		<br>
+		<br>
+		<b>Арифметические операторы</b><br>
+		<table width="100%">
+			<tr>
+				<td>=</td>
+				<td>– присвоить значение одного дека другому</td>
+			</tr>
+			<tr>
+				<td>==; !=</td>
+				<td>– сравнить два дека поэлементно</td>
+			</tr>
+			<tr>
+				<td><; >; <=; >=</td>
+				<td>– сравнить два дека лексикографически</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<b>Методы deque</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">Dq.at(I)</span></td>
+				<td>– обратиться к I-му элементу с генерацией исключения</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.front()</span></td>
+				<td>– вернуть первый элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.back()</span></td>
+				<td>– вернуть последний элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.push_front(Value)</span></td>
+				<td>– добавить элемент в начало</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.push_back(Value)</span></td>
+				<td>– добавить элемент в конец</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.emplace_front(Value)</span></td>
+				<td>– добавить элемент в начало</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.emplace_back(Value)</span></td>
+				<td>– добавить элемент в конец</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.pop_front()</span></td>
+				<td>– удалить первый элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.pop_back()</span></td>
+				<td>– удалить последний элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.size()</span></td>
+				<td>– вернуть размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.resize(N)</span></td>
+				<td>– изменить размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.resize(N, Value)</span></td>
+				<td>– изменить размер, изменяя новые элементы</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.clear()</span></td>
+				<td>– очистить</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.empty()</span></td>
+				<td>– true, если пуст</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.begin()</span></td>
+				<td>– вернуть итератор начала</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.end()</span></td>
+				<td>– вернуть итератор конца</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.insert(It, Value)</span></td>
+				<td>– вставить в итератор элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.insert(It, N, Value)</span></td>
+				<td>– вставить в итератор элемент N раз</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.insert(It1, It2, It3)</span></td>
+				<td>– вставить в итератор элементы из диапазона итераторов</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.erase(It)</span></td>
+				<td>– удалить элемент с итератора</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq.erase(It1, It2)</span></td>
+				<td>– удалить элементы из диапазона итераторов</td>
+			</tr>
+			<tr>
+				<td><span class="code">Dq1.swap(Dq2)</span></td>
+				<td>– обменять значения</td>
+			</tr>
+		</table>
+	</div>
+</body>

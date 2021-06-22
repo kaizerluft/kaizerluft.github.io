@@ -1,0 +1,110 @@
+*
+{
+	margin: 0;
+	padding: 0;
+}
+
+header
+{
+	z-index: 1;
+	font-size: 10pt;
+	position: fixed;
+}
+
+body
+{
+	background: #f0f0f0;
+}
+
+mark
+{
+	background: #000000;
+	color: #ffffff;
+}
+
+table
+{
+	border-collapse: collapse;
+}
+
+tr
+{
+	vertical-align: top;
+}
+
+.menu
+{
+	z-index: 1;
+	position: fixed;
+	background: #1e1e1e;
+	height: 37px;
+	width: 100%;
+}
+
+.text
+{
+	margin: auto;
+	width: 700px;
+	background: #ffffff;
+	padding: 10px;
+	font-family: Calibri Light;
+	text-align: justify;
+	font-size: 90%;
+}
+
+.code
+{
+	font-family: Consolas;
+	text-align: justify;
+	font-size: 90%;
+}
+
+nav ul
+{
+	z-index: 1;
+	list-style: none;
+	background-color: #1e1e1e;
+}
+
+nav > ul > li
+{
+	z-index: 1;
+	float: left;
+}
+
+nav ul::after
+{
+	z-index: 1;
+	content: "";
+	display: block;
+	clear: both;
+}
+
+nav ul li a
+{
+	z-index: 1;
+	display: inline-block;
+	padding: 10px 20px;
+	text-decoration: none;
+	color: white;
+	width: 125px;
+}
+
+nav ul li a:hover
+{
+	z-index: 1;
+	background-color: #950740;
+}
+
+nav ul ul
+{
+	z-index: 1;
+	display: none;
+	position: absolute;
+}
+
+nav ul li:hover ul
+{
+	z-index: 1;
+	display: block;
+}

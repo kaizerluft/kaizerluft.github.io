@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>3 C++ VECTOR</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<script language="JavaScript" src="menu.js"></script>
+	<div class="text">
+		<br>
+		<br>
+		<mark>3 C++ VECTOR</mark><br>
+		<br>
+		<br>
+		<b>vector</b> – структура данных, которая уже является моделью динамического массива<br>
+		<br>
+		<br>
+		<b>Подключение заголовочного файла vector</b><br>
+		<span class="code">#include &lt;vector&gt;</span><br>
+		<br>
+		<br>
+		<b>Объявление и инициализация вектора</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">vector&lt;int&gt; V;</span></td>
+				<td>– объявить вектор</td>
+			</tr>
+			<tr>
+				<td><span class="code">vector&lt;int&gt; V(N);</span></td>
+				<td>– объявить нулевой вектор размером N</td>
+			</tr>
+			<tr>
+				<td><span class="code">vector&lt;int&gt; V(N, Value);</span></td>
+				<td>– объявить вектор размером N со значениями Value</td>
+			</tr>
+			<tr>
+				<td><span class="code">vector&lt;vector&lt;int&gt;&gt; V;</span></td>
+				<td>– объявить двумерный вектор</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		К отдельным элементам вектора можно обращаться по индексу<br>
+		Где <span class="code">V[0]</span> – первый элемент вектора; <span class="code">V[0][0]</span> – первый элемент двумерного вектора<br>
+		<br>
+		<br>
+		<span class="code">vector&lt;vector&lt;int&gt;&gt; V(N, vector&lt;int&gt;(M));</span><br>
+		– выделить память двумерному вектору размером N×M<br>
+		<br>
+		<br>
+		<b>Арифметические операторы</b><br>
+		<table width="100%">
+			<tr>
+				<td>=</td>
+				<td>– присвоить значение одного вектора другому</td>
+			</tr>
+			<tr>
+				<td>==; !=</td>
+				<td>– сравнить два вектора поэлементно</td>
+			</tr>
+			<tr>
+				<td><; >; <=; >=</td>
+				<td>– сравнить два вектора лексикографически</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<b>Методы vector</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">V.at(I)</span></td>
+				<td>– обратиться к I–му элементу с генерацией исключения</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.front()</span></td>
+				<td>– вернуть первый элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.back()</span></td>
+				<td>– вернуть последний элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.push_back(Value)</span></td>
+				<td>– добавить элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.emplace_back(Value)</span></td>
+				<td>– добавить элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.pop_back()</span></td>
+				<td>– удалить последний элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.size()</span></td>
+				<td>– вернуть размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.resize(N)</span></td>
+				<td>– изменить размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.resize(N, Value)</span></td>
+				<td>– изменить размер, изменяя новые элементы</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.clear()</span></td>
+				<td>– очистить</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.empty()</span></td>
+				<td>– true, если пуст</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.reserve(Byte)</span></td>
+				<td>– зарезервировать объем памяти</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.capacity()</span></td>
+				<td>– вернуть объем памяти</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.shrink_to_fit()</span></td>
+				<td>– освободить память</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.begin()</span></td>
+				<td>– вернуть итератор начала</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.end()</span></td>
+				<td>– вернуть итератор конца</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.insert(It, Value)</span></td>
+				<td>– вставить в итератор элемент</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.insert(It, N, Value)</span></td>
+				<td>– вставить в итератор элемент N раз</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.insert(It1, It2, It3)</span></td>
+				<td>– вставить в итератор элементы из диапазона итераторов</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.erase(It)</span></td>
+				<td>– удалить элемент с итератора</td>
+			</tr>
+			<tr>
+				<td><span class="code">V.erase(It1, It2)</span></td>
+				<td>– удалить элементы из диапазона итераторов</td>
+			</tr>
+			<tr>
+				<td><span class="code">V1.swap(V2)</span></td>
+				<td>– обменять значения</td>
+			</tr>
+		</table>
+	</div>
+</body>

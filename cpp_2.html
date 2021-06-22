@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>2 C++ STRING</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<script language="JavaScript" src="menu.js"></script>
+	<div class="text">
+		<br>
+		<br>
+		<mark>2 C++ STRING</mark><br>
+		<br>
+		<br>
+		<b>string</b> – класс с методами и переменными для организации работы со строками<br>
+		<br>
+		<br>
+		<b>Подключение заголовочного файла string</b><br>
+		<span class="code">#include &lt;string&gt;</span><br>
+		<br>
+		<br>
+		<b>Объявление и инициализация строки</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">string Str;</span></td>
+				<td>– объявить строку</td>
+			</tr>
+			<tr>
+				<td><span class="code">string Str = "text";</span></td>
+				<td>– объявить и инициализировать строку</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		К отдельным символам строки можно обращаться по индексу<br>
+		Где <span class="code">Str[0]</span> – первый символ строки<br>
+		<br>
+		<br>
+		<b>Ввод строки</b><br>
+		<span class="code">cin >> Str;</span><br>
+		<span class="code">getline(cin, Str);</span><br>
+		<span class="code">cin</span> – считывание до пробела или каретки; <span class="code">getline</span> – считывание всей строки<br>
+		<br>
+		<br>
+		<b>Вывод строки</b><br>
+		<span class="code">cout << Str;</span><br>
+		<br>
+		<br>
+		<b>Арифметические операторы</b><br>
+		<table width="100%">
+			<tr>
+				<td>=</td>
+				<td>– присвоить значение одной строки другой</td>
+			</tr>
+			<tr>
+				<td>+=</td>
+				<td>– добавить в конец строки другую строку</td>
+			</tr>
+			<tr>
+				<td>+</td>
+				<td>– конкатенировать две строки</td>
+			</tr>
+			<tr>
+				<td>==; !=</td>
+				<td>– сравнить две строки посимвольно</td>
+			</tr>
+			<tr>
+				<td><; >; <=; >=</td>
+				<td>– сравнить две строки лексикографически</td>
+			</tr>
+		</table>
+		<br>
+		<br>
+		<b>Методы string</b><br>
+		<table width="100%">
+			<tr>
+				<td><span class="code">Str.push_back(Sign)</span></td>
+				<td>– добавить символ</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.size()</span></td>
+				<td>– вернуть размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.length()</span></td>
+				<td>– вернуть размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.resize(N)</span></td>
+				<td>– изменить размер</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.resize(N, Sign)</span></td>
+				<td>– изменить размер, изменяя новые символы</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.clear()</span></td>
+				<td>– очистить</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.empty()</span></td>
+				<td>– true, если пуст</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.begin()</span></td>
+				<td>– вернуть итератор начала</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.end()</span></td>
+				<td>– вернуть итератор конца</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.insert(Pos, N, Sign)</span></td>
+				<td>– вставить в позицию символ N раз</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.insert(Pos, Str2)</span></td>
+				<td>– вставить в позицию строку</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.insert(Pos1, Str2, Pos2, N)</span></td>
+				<td>– вставить в позицию строку от Pos N символов</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.insert(It, Sign)</span></td>
+				<td>– вставить в итератор символ</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.insert(It, N, Sign)</span></td>
+				<td>– вставить в итератор символ N раз</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.insert(It1, It2, It3)</span></td>
+				<td>– вставить в итератор символы из диапазона</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.append(N, Sign)</span></td>
+				<td>– добавить символ N раз</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.append(Str2)</span></td>
+				<td>– добавить строку</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.append(Str2, Pos, N)</span></td>
+				<td>– добавить строку от Pos N символов</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.replace(Pos, N1, N2, Sign)</span></td>
+				<td>– удалить от Pos N1 символов и вставить символ N2 раз</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.replace(Pos, N, Str2)</span></td>
+				<td>– удалить от Pos N символов и вставить строку</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.replace(Pos1, N1, Str2, Pos2, N2)</span></td>
+				<td>– удалить от Pos1 N1 символов и вставить строку от Pos2 N2 символов</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.erase(Pos)</span></td>
+				<td>– удалить символы с позиции</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.erase(Pos, N)</span></td>
+				<td>– удалить символы с позиции N раз</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.erase(It)</span></td>
+				<td>– удалить символ с итератора</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.erase(It1, It2)</span></td>
+				<td>– удалить символы из диапазона итераторов</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.substr(Pos)</span></td>
+				<td>– вернуть подстроку с позиции</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.substr(Pos, N)</span></td>
+				<td>– вернуть подстроку с позиции N символов</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.swap(Str2)</span></td>
+				<td>– обменять значения</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find(Str2)</span></td>
+				<td>– вернуть позицию встречи строки</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find(Str2, Pos)</span></td>
+				<td>– вернуть позицию встречи строки поиск от Pos</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find(Str2, Pos, N)</span></td>
+				<td>– вернуть позицию встречи N символов строки поиск от Pos</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.rfind(Str2)</span></td>
+				<td>– вернуть позицию встречи строки поиск справа</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.rfind(Str2, Pos)</span></td>
+				<td>– вернуть позицию встречи строки поиск от Pos справа</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.rfind(Str2, Pos, N)</span></td>
+				<td>– вернуть позицию встречи N символов строки поиск от Pos справа</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find_first_of(Str2)</span></td>
+				<td>– вернуть позицию встречи символа из строки</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find_first_of(Str2, Pos)</span></td>
+				<td>– вернуть позицию встречи символа из строки поиск от Pos</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find_last_of(Str2)</span></td>
+				<td>– вернуть позицию встречи символа из строки поиск справа</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find_last_of(Str2, Pos)</span></td>
+				<td>– вернуть позицию встречи символа из строки поиск от Pos справа</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find_first_not_of(Str2)</span></td>
+				<td>– вернуть позицию встречи символа не из строки</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find_first_not_of(Str2, Pos)</span></td>
+				<td>– вернуть позицию встречи символа не из строки поиск от Pos</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find_last_not_of(Str2)</span></td>
+				<td>– вернуть позицию встречи символа не из строки поиск справа</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str1.find_last_not_of(Str2, Pos)</span></td>
+				<td>– вернуть позицию встречи символа не из строки поиск от Pos справа</td>
+			</tr>
+			<tr>
+				<td><span class="code">Str.c_str()</span></td>
+				<td>– вернуть строку как указатель типа char *</td>
+			</tr>
+		</table>
+	</div>
+</body>
