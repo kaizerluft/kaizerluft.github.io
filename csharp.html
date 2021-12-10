@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>C#</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<script src="menu.js"></script>
+<div class="text">
+
+
+<m>[FORM] ПРОЗРАЧНАЯ ФОРМА</m>
+public Form1()
+{
+	InitializeComponent();
+	this.AllowTransparency = true;
+	this.TransparencyKey = this.BackColor;
+}
+
+
+
+
+<m>[FORM] СТАТИЧНАЯ ФОРМА</m>
+protected override void WndProc(ref Message _Message)
+{
+	switch (_Message.Msg)
+	{
+		case 0x0112:
+			int Command = _Message.WParam.ToInt32() & 0xfff0;
+			if (Command == 0xF010) return;
+			break;
+	}
+	base.WndProc(ref _Message)
+}
+
+
+
+
+<m>[FORM] СКВОЗНАЯ ФОРМА</m>
+[DllImport("user32.dll", SetLastError = true)]
+static extern int GetWindowLong(IntPtr HWnd, int NIndex);
+[DllImport("user32.dll")]
+static extern int SetWindowLong(IntPtr HWnd, int NIndex, int DWNewLong);
+protected override void OnLoad(EventArgs E)
+{
+	base.OnLoad(E);
+	SetWindowLong(this.Handle, -20, GetWindowLong(this.Handle, -20) | 0x800000 | 0x20);
+}
+
+
+
+
+<m>[FORM] ФОРМА НЕВИДИМА ДЛЯ ALT+TAB</m>
+protected override CreateParams CreateParams
+{
+	get
+	{
+		CreateParams _CreateParams = base.CreateParams;
+		_CreateParams.ExStyle |= 0x80;
+		return _CreateParams;
+	}
+}
+
+
+
+
+<m>[FORM] ИЗМЕНИТЬ РАЗМЕР НЕКЛИЕНТСКОЙ ОБЛАСТИ</m>
+[StructLayout(LayoutKind.Sequential)]
+public struct Margins {public int Left, Right, Top, Bottom;}
+[DllImport("dwmapi.dll")]
+public static extern IntPtr DwmExtendFrameIntoClientArea(IntPtr HWnd, ref Margins MarInsert);
+public Form1()
+{
+	InitializeComponent();
+	Margins Margins;
+	Margins.Left = Margins.Right = Margins.Bottom = 0;
+	Margins.Top = 40;
+	DwmExtendFrameIntoClientArea(this.Handle, ref Margins);
+}
+
+
+
+
+<m>[FORM] УСТАНОВИТЬ AERO-BACKGROUND СТИЛЬ ФОНА</m>
+[DllImport("gdi32")]
+private static extern IntPtr CreateEllipticRgn(int LeftRect, int TopRect, int RightRect, int BottomRect);
+[DllImport("dwmapi")]
+private static extern int DwmEnableBlurBehindWindow(IntPtr HWnd, ref DwmBlurBehind BlurBehind);
+public struct DwmBlurBehind
+{
+	public int DWFlags;
+	public bool FEnable, FTransitionOnMaximized;
+	public IntPtr HRgnBlur;
+}
+protected override void OnPaint(PaintEventArgs E)
+{
+	E.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(0, 0, Width, Height));
+}
+public Form1()
+{
+	InitializeComponent();
+	DwmBlurBehind _DwmBlurBehind = new DwmBlurBehind
+	{
+		FEnable = true,
+		DWFlags = 1,
+		HRgnBlur = CreateEllipticRgn(0, 0, Width, Height),
+		FTransitionOnMaximized = false
+	};
+	DwmEnableBlurBehindWindow(Handle, ref _DwmBlurBehind);
+}
+
+
+
+
+<m>[FORM] ЗАПУСК ПРИЛОЖЕНИЯ ВНУТРИ ФОРМЫ</m>
+[DllImport("user32.dll")]
+static extern IntPtr SetParent(IntPtr HWndChild, IntPtr HWndNewParent);
+public Form1()
+{
+	InitializeComponent();
+	Process _Process = Process.Start("PROGRAM_NAME");
+	while (_Process.MainWindowHandle == IntPtr.Zero)
+	{
+		Thread.Sleep(100);
+		_Process.Refresh();
+	}
+	SetParent(_Process.MainWindowHandle, this.Handle);
+}
+
+
+
+
+<m>[PROCESS] ВЕРНУТЬ ИМЯ ОКНА ПО ДЕСКРИПТОРУ</m>
+[DllImport("user32.dll")]
+private static extern int GetWindowText(IntPtr HWnd, StringBuilder Title, int Size);
+public string GetWindowTitle(IntPtr HWnd)
+{
+	StringBuilder Title = new StringBuilder();
+	GetWindowText(HWnd, Title, 256);
+	return Title.ToString();
+}
+
+
+
+
+<m>[PROCESS] ВЕРНУТЬ ИМЯ АКТИВНОГО ОКНА</m>
+[DllImport("user32.dll")]
+static extern IntPtr GetForegroundWindow();
+[DllImport("user32.dll")]
+static extern int GetWindowText(IntPtr HWnd, StringBuilder Text, int Count);
+private string GetActiveWindowTitle()
+{
+	StringBuilder Buff = new StringBuilder(255);
+	IntPtr Handle = GetForegroundWindow();
+	if (GetWindowText(Handle, Buff, 255) &gt; 0) return Buff.ToString();
+	return null;
+}
+
+
+
+
+<m>[PROCESS] ВЕРНУТЬ ИМЕНА ВСЕХ ОТКРЫТЫХ ОКОН</m>
+Process[] ProcessList = Process.GetProcesses();
+foreach (Process _Process in ProcessList)
+{
+	if (!String.IsNullOrEmpty(_Process.MainWindowTitle))
+	{
+		TextBox1.Text += _Process.MainWindowTitle + "\r\n";
+		//_Process.ProcessName
+	}
+}
+
+
+
+
+<m>[PROCESS] ВЕРНУТЬ ДЕСКРИПТОР ОКНА ПО НАЗВАНИЮ (ИЛИ ЧАСТИ НАЗВАНИЯ) ОКНА</m>
+public static IntPtr WinGetHandle(string WindowName)
+{
+	IntPtr HWnd = IntPtr.Zero;
+	foreach (Process _Process in Process.GetProcesses())
+	{
+		if (_Process.MainWindowTitle.Contains(WindowName)) HWnd = _Process.MainWindowHandle;
+	}
+	return HWnd;
+}
+
+
+
+
+<m>[PROCESS] ЗАПУСК ПРОЦЕССА В ОПРЕДЕЛЕННЫХ ПОЗИЦИИ И РАЗМЕРЕ</m>
+[DllImport("user32.dll")]
+public static extern IntPtr SetWindowPos(IntPtr HWnd, int HWndAfter, int X, int Y, int Width, int Height, int Flags);
+public Form1()
+{
+	InitializeComponent();
+	ProcessStartInfo _ProcessStartInfo = new ProcessStartInfo("PROGRAM_NAME");
+	_ProcessStartInfo.WindowStyle = ProcessWindowStyle.Normal;
+	Process _Process = Process.Start(_ProcessStartInfo);
+	_Process.WaitForInputIdle();
+	SetWindowPos(_Process.MainWindowHandle, 0, 200, 100, 500, 500, 0);
+}
+
+
+
+
+<m>[PROCESS] ИЗМЕНИТЬ ИМЯ ОКНА</m>
+[DllImport("user32.dll")]
+static extern int SetWindowText(IntPtr HWnd, string Text);
+public Form1()
+{
+	IntPtr HWnd = IntPtr.Zero;
+	Process[] ProcessList = Process.GetProcessesByName("PROGRAM_NAME");
+	if (ProcessList.Length &gt; 0) HWnd = ProcessList[0].MainWindowHandle;
+	SetWindowText(HWnd, "TITLE_NAME");
+}
+
+
+
+
+<m>[PROCESS] СКРЫТЬ ПРИЛОЖНИЕ ИЗ ПАНЕЛИ ЗАДАЧ</m>
+[DllImport("User32.dll")]
+public static extern int SetWindowLong(IntPtr HWnd, int NIndex, int DWNewLong);
+[DllImport("User32.dll")]
+public static extern int GetWindowLong(IntPtr HWnd, int NIndex);
+[DllImport("user32.dll")]
+static extern bool ShowWindow(IntPtr HWnd, int NCmdShow);
+public Form1()
+{
+	InitializeComponent();
+	ShowWindow(HWnd, 0x00);
+	SetWindowLong(HWnd, -0x14, GetWindowLong(HWnd, -0x14) | 0x0080);
+	ShowWindow(HWnd, 0x05);
+}
+
+
+
+
+<m>[FILES] ОБЩИЕ КОМАНДЫ</m>
+File.Create(FileName);								//создать файл
+File.Delete(FileName);								//удалить файл
+File.Move(FileName1, FileName2);					//переместить файл в другую директорию
+File.Exists(FileName)								//true - файл существует
+File.ReadAllText(FileName)							//вернуть весь текст из файла
+File.ReadAllLines(FileName)							//вернуть все строки из файла
+File.ReadAllBytes(FileName)							//вернуть все байты из файла
+File.WriteAllText(FileName, Text);					//записать весь текст в файл
+File.WriteAllLines(FileName, Lines);				//записать все строки в файл
+File.WriteAllBytes(FileName, Bytes);				//записать все байты в файл
+File.AppendAllText(FileName, Text);					//добавить текст в файл
+File.AppendAllLines(FileName, Lines);				//добавить все строки в файл
+StreamReader Fin = new StreamReader(FileName);		//объявить переменную считывания из файла
+StreamWriter Fout = new StreamWriter(FileName);		//объявить переменную записи в файл
+Fin.ReadToEnd();									//вернуть весь текст из файла
+Fin.ReadLine();										//вернуть строку из файла
+
+
+
+
+<m>[STRING] ОБЩИЕ КОМАНДЫ</m>
+Text.Contains(Str)				//true - строка содержит подстроку
+Text.IndexOf(Str)				//вернуть индекс первого вхождения подстроки
+Text.IndexOf(Str, Index)		//вернуть индекс первого вхождения подстроки [от индекса]
+Text.IndexOf(Str, Index, N)		//вернуть индекс первого вхождения подстроки [от индекса; позиций]
+Text.LastIndexOf(Str)			//вернуть индекс последнего вхождения подстроки
+Text.LastIndexOf(Str, Index)	//вернуть индекс последнего вхождения подстроки [от индекса]
+Text.LastIndexOf(Str, Index, N)	//вернуть индекс последнего вхождения подстроки [от индекса; позиций]
+Text.ToUpper()					//вернуть строку с верхним регистром
+Text.ToLower()					//вернуть строку с нижним регистром
+Text.Replace(Str1, Str2)		//вернуть строку с заменой всех подстрок на подстроку
+Text.Insert(Index, Str)			//вернуть строку с вставкой подстроки [от индекса]
+Text.Remove(Index)				//вернуть строку с удалением символов [от индекса]
+Text.Remove(Index, N)			//вернуть строку с удалением символов [от индекса; позиций]
+
+
+
+
+<m>[WMP] ОБЩИЕ КОМАНДЫ</m>
+WMPLib.WindowsMediaPlayer Player1 = new WMPLib.WindowsMediaPlayer();	//объявить wmp
+Player1.controls.play();												//воспроизвести wmp
+Player1.controls.stop();												//остановить wmp
+Player1.URL = URL;														//указать путь к файлу
+Player1.settings.volume = 10;											//присвоить громкость wmp
+Player1.settings.setMode("loop", true);									//зациклить воспроизведение wmp
+Player1.settings.setMode("shuffle", true);								//перемешать плейлист wmp
+
+
+
+
+<m>[SELENIUM] FIREFOX ОБЩИЕ КОМАНДЫ</m>
+FirefoxDriverService Service = FirefoxDriverService.CreateDefaultService();	//объявить firefoxdriverservice
+FirefoxOptions Options = new FirefoxOptions();								//объявить firefoxoptions
+FirefoxProfileManager ProfileManager = new FirefoxProfileManager();			//объявить firefoxprofilemanager
+FirefoxProfile Profile = ProfileManager.GetProfile("PROFILE_NAME");
+Options.Profile = _FirefoxProfile;											//связать с profile_name
+Options.AddArgument("--kiosk");												//установить полный экран (f11)
+Service.HideCommandPromptWindow = true;										//скрыть консоль selenium
+IWebDriver Driver = new FirefoxDriver(Service, Options);					//объявить iwebdriver
+Driver.Navigate().GoToUrl("URL");											//перейти на сайт через url
+
+
+
+
+<m>[CEFSHARP] УСТАНОВИТЬ ПУТЬ ХРАНЕНИЯ ДАННЫХ</m>
+public Form1()
+{
+	InitializeComponent();
+	CefSettings _CefSettings = new CefSettings();
+	_CefSettings.CachePath = "PATH";
+	Cef.Initialize(_CefSettings);
+}
+
+
+
+
+<m>[CEFSHARP] ОТКЛЮЧИТЬ JAVASCRIPT</m>
+public Form1()
+{
+	BrowserSettings _BrowserSettings = new BrowserSettings();
+	_BrowserSettings.Javascript = CefState.Disabled;
+	ChromiumWebBrowser1.BrowserSettings = _BrowserSettings;
+}
+
+
+
+
+<m>[CEFSHARP] ВЕРНУТЬ ИСХОДНЫЙ КОД САЙТА</m>
+BeginInvoke((Action) (async () => {TextBox1.Text = await ChromiumWebBrowser1.GetSourceAsync();}));
+
+
+
+
+<m>[OTHER] БЛОКИРОВАТЬ ВВОД С МЫШИ И КЛАВИАТУРЫ</m>
+[DllImportAttribute("user32.dll", EntryPoint = "BlockInput")]
+[return: MarshalAsAttribute(UnmanagedType.Bool)]
+public static extern bool BlockInput([MarshalAsAttribute(UnmanagedType.Bool)] bool Block);
+public Form1()
+{
+	InitializeComponent();
+	BlockInput(true);
+}
+
+
+
+
+<m>[OTHER] РЕГИСТРАЦИЯ ГЛОБАЛЬНЫХ КЛАВИШ</m>
+[DllImport("user32.dll")]
+public static extern bool RegisterHotKey(IntPtr HWnd, int ID, int Modifiers, int Key);
+protected override void WndProc(ref Message _Message)
+{
+	if (_Message.Msg == 0x0312)
+	{
+		int ID = _Message.WParam.ToInt32();
+		if (ID == 1) return;
+	}
+	base.WndProc(ref _Message);
+}
+//0x0000 - none
+//0x0001 - alt
+//0x0002 - ctrl
+//0x0004 - shift
+//0x0008 - win
+public Form1()
+{
+	InitializeComponent();
+	Boolean F4Registered = RegisterHotKey(this.Handle, 1, 0x0001, (int)Keys.F4);
+}
+
+
+
+
+<m>[OTHER] ЗАМЕНА ЦВЕТА ВЫДЕЛЯЕМОГО ТЕКСТА</m>
+//настройка изменяет цвет выделяемого текста всей системы
+//настройка сбрасывается после перезагрузки системы
+[DllImport ("user32.dll")]
+static extern bool SetSysColors(int Length, int[] Elements, uint[] _Color);
+void ChangeColorOfSelectedText(Color BackgroundColor, Color FontColor)
+{
+	int[] Elements = {13};
+	List<uint> Colors = new List<uint>();
+	Colors.Add((uint)ColorTranslator.ToWin32(BackgroundColor));
+	SetSysColors(Elements.Length, Elements, Colors.ToArray());
+	Elements[0] = 14;
+	Colors.Clear();
+	Colors.Add((uint)ColorTranslator.ToWin32(FontColor));
+	SetSysColors(Elements.Length, Elements, Colors.ToArray());
+}
+
+
+
+
+<m>[OTHER] ОТКРЫТЬ ДИАЛОГОВОЕ ОКНО ОТКРЫТИЯ/ЗАКРЫТИЯ ФАЙЛА</m>
+//открыть диалоговое окно открытия файла
+if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel) return File.ReadAllText(OpenFileDialog1.FileName);
+//открыть диалоговое окно сохранения файла
+if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel) File.WriteAllText(SaveFileDialog1.FileName, Text);
+</div>
+</body>
+</html>
