@@ -24,12 +24,10 @@ public Form1()
 <m>[FORM] СТАТИЧНАЯ ФОРМА</m>
 protected override void WndProc(ref Message _Message)
 {
-	switch (_Message.Msg)
+	if (_Message.Msg == 0x0112)
 	{
-		case 0x0112:
-			int Command = _Message.WParam.ToInt32() & 0xfff0;
-			if (Command == 0xF010) return;
-			break;
+		int Command = _Message.WParam.ToInt32() & 0xfff0;
+		if (Command == 0xF010) return;
 	}
 	base.WndProc(ref _Message);
 }
