@@ -453,6 +453,30 @@ UP1.release();	//сохранить данные; освободить их вз
 
 
 
+<m>[C++] TUPLE</m>
+tuple&lt;int, double, wstring&gt; t1(1, 1.1, L"");					//инициализация tuple()
+tuple&lt;int, double, wstring&gt; t2 = make_tuple(2, 2.1, L"text2");	//инициализация make_tuple() (operator=)
+get&lt;2&gt;(t1) = L"text1";											//get&lt;&gt;() = value
+wcout &lt;&lt; get&lt;0&gt;(t1) &lt;&lt; "\n";
+wcout &lt;&lt; get&lt;1&gt;(t1) &lt;&lt; "\n";
+wcout &lt;&lt; get&lt;2&gt;(t1) &lt;&lt; "\n";									//get&lt;&gt;()
+wcout &lt;&lt; tuple_size&lt;decltype(t1)&gt;::value &lt;&lt; "\n";				//вернуть размер (tuple_size = 3)
+t1.swap(t2);													//swap()
+<b>//tie()</b>
+int i_val;
+double d_val;
+wstring wstr_val;
+tie(i_val, d_val, wstr_val) = t1;								//i_val = 1; d_val = 1.1; wstr_val = "text1"
+tie(i_val, ignore, wstr_val) = t2;								//i_val = 2; d_val = 2.1; wstr_val = "text2"
+<b>//tuple_cat()</b>
+auto t3 = tuple_cat(t1, t2, t1);								//объединить кортежи (tuple_size = 9)
+<b>//operator's</b>
+wcout &lt;&lt; (t1 == t2) &lt;&lt; "\n";									//operator==
+wcout &lt;&lt; (t1 != t2) &lt;&lt; "\n";									//operator!=
+
+
+
+
 <m>[C++] МНОГОМОДУЛЬНЫЕ ПРОЕКТЫ</m>
 <b>//код файла "%CLASSNAME.H%"</b>
 #pragma once
