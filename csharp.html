@@ -436,18 +436,20 @@ private void Timer1Tick(object Sender, EventArgs E)
 <m>[OTHER] ЗАМЕНА ЦВЕТА ВЫДЕЛЯЕМОГО ТЕКСТА</m>
 //настройка изменяет цвет выделяемого текста всей системы
 //настройка сбрасывается после перезагрузки системы
-[DllImport ("user32.dll")]
-static extern bool SetSysColors(int Length, int[] Elements, uint[] _Color);
-void ChangeColorOfSelectedText(Color BackgroundColor, Color FontColor)
+const int COLOR_HIGHLIGHT = 13;
+const int COLOR_HIGHLIGHTTEXT = 14;
+[DllImport("user32.dll")]
+static extern bool SetSysColors(int cElements, int[] lpaElements, uint[] lpaRgbValues);
+void ChangeColorOfSelectedText(Color highlightColor, Color highlightTextColor)
 {
-	int[] Elements = {13};
-	List<uint> Colors = new List<uint>();
-	Colors.Add((uint)ColorTranslator.ToWin32(BackgroundColor));
-	SetSysColors(Elements.Length, Elements, Colors.ToArray());
-	Elements[0] = 14;
-	Colors.Clear();
-	Colors.Add((uint)ColorTranslator.ToWin32(FontColor));
-	SetSysColors(Elements.Length, Elements, Colors.ToArray());
+	int[] elements = {COLOR_HIGHLIGHT};
+	List<uint> colors = new List<uint>();
+	colors.Add((uint) ColorTranslator.ToWin32(highlightColor));
+	SetSysColors(elements.Length, elements, colors.ToArray());
+	elements[0] = COLOR_HIGHLIGHTTEXT;
+	colors.Clear();
+	colors.Add((uint) ColorTranslator.ToWin32(highlightTextColor));
+	SetSysColors(elements.Length, elements, colors.ToArray());
 }
 
 
