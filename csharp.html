@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>C#</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<script src="menu.js"></script>
+<div class="text">
+
+
+<m>[FORM] ПРОЗРАЧНАЯ ФОРМА</m>
+public Form1() {
+	InitializeComponent();
+	AllowTransparency = true;
+	TransparencyKey = Color.White;
+}
+
+
+
+
+<m>[FORM] СТАТИЧНАЯ ФОРМА</m>
+protected override void WndProc(ref Message message) {
+	if (message.Msg == 0x0112) {
+		if (message.WParam.ToInt32() & 0xfff0 == 0xF010) {
+			return;
+		}
+	}
+	base.WndProc(ref message);
+}
+
+
+
+
+<m>[FORM] СКВОЗНАЯ ФОРМА</m>
+[DllImport("user32.dll")] static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+[DllImport("user32.dll")] static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+protected override void OnLoad(EventArgs e) {
+	base.OnLoad(e);
+	SetWindowLong(Handle, -20, GetWindowLong(Handle, -20) | 0x800000 | 0x20);
+}
+
+
+
+
+<m>[FORM] ФОРМА НЕВИДИМА ДЛЯ ALT+TAB</m>
+protected override CreateParams CreateParams {
+	get {
+		CreateParams createParams = base.CreateParams;
+		createParams.ExStyle |= 0x80;
+		return createParams;
+	}
+}
+//или с сохранением стиля
+public Form1() {
+	Form hiddenForm = new Form();
+	hiddenForm.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+	hiddenForm.ShowInTaskbar = false;
+	Owner = hiddenForm;
+	InitializeComponent();
+}
+
+
+
+
+<m>[FORM] ИЗМЕНИТЬ РАЗМЕР НЕКЛИЕНТСКОЙ ОБЛАСТИ</m>
+[StructLayout(LayoutKind.Sequential)] public struct Margins {
+	public int left, right, top, bottom;
+}
+[DllImport("dwmapi.dll")] static extern IntPtr DwmExtendFrameIntoClientArea(IntPtr hWnd, ref Margins margins);
+public Form1() {
+	InitializeComponent();
+	Margins margins;
+	margins.left = margins.right = margins.bottom = 0;
+	margins.top = 40;
+	DwmExtendFrameIntoClientArea(Handle, ref margins);
+}
+
+
+
+
+<m>[FORM] УСТАНОВИТЬ AERO-BACKGROUND СТИЛЬ ФОНА</m>
+[DllImport("gdi32")] static extern IntPtr CreateEllipticRgn(int leftRect, int topRect, int rightRect, int bottomRect);
+[DllImport("dwmapi")] static extern int DwmEnableBlurBehindWindow(IntPtr hWnd, ref DwmBlurBehind blurBehind);
+public struct DwmBlurBehind {
+	public int dwFlags;
+	public bool fEnable, fTransitionOnMaximized;
+	public IntPtr hRgnBlur;
+}
+protected override void OnPaint(PaintEventArgs e) {
+	e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(0, 0, Width, Height));
+}
+public Form1() {
+	InitializeComponent();
+	DwmBlurBehind dwmBlurBehind = new DwmBlurBehind {
+		fEnable = true,
+		dwFlags = 1,
+		hRgnBlur = CreateEllipticRgn(0, 0, Width, Height),
+		fTransitionOnMaximized = false
+	};
+	DwmEnableBlurBehindWindow(Handle, ref dwmBlurBehind);
+}
+
+
+
+
+<m>[FORM] ЗАПУСК ПРИЛОЖЕНИЯ ВНУТРИ ФОРМЫ</m>
+[DllImport("user32.dll")] static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+public Form1() {
+	InitializeComponent();
+	Process process = Process.Start("PROGRAM_NAME");
+	while (process.MainWindowHandle == IntPtr.Zero) {
+		Thread.Sleep(100);
+		process.Refresh();
+	}
+	SetParent(process.MainWindowHandle, Handle);
+}
+
+
+
+
+<m>[PROCESS] ВЕРНУТЬ ИМЯ ОКНА ПО ДЕСКРИПТОРУ</m>
+[DllImport("user32.dll")] static extern int GetWindowText(IntPtr hWnd, StringBuilder title, int count);
+public string GetWindowTitle(IntPtr hWnd) {
+	StringBuilder title = new StringBuilder();
+	GetWindowText(hWnd, title, 256);
+	return title.ToString();
+}
+
+
+
+
+<m>[PROCESS] ВЕРНУТЬ ИМЯ АКТИВНОГО ОКНА</m>
+[DllImport("user32.dll")] static extern IntPtr GetForegroundWindow();
+[DllImport("user32.dll")] static extern int GetWindowText(IntPtr hWnd, StringBuilder title, int count);
+private string GetActiveWindowTitle() {
+	StringBuilder title = new StringBuilder(255);
+	if (GetWindowText(GetForegroundWindow(), title, 255) &gt; 0) {
+		return title.ToString();
+	}
+	return null;
+}
+
+
+
+
+<m>[PROCESS] ВЕРНУТЬ ИМЕНА ВСЕХ ОТКРЫТЫХ ОКОН</m>
+foreach (Process process in Process.GetProcesses()) {
+	if (!String.IsNullOrEmpty(process.MainWindowTitle)) {
+		textBox1.Text += process.MainWindowTitle + "\r\n";
+		//process.ProcessName
+	}
+}
+
+
+
+
+<m>[PROCESS] ВЕРНУТЬ ДЕСКРИПТОР ОКНА ПО НАЗВАНИЮ (ИЛИ ЧАСТИ НАЗВАНИЯ) ОКНА</m>
+public static IntPtr WinGetHandle(string title) {
+	IntPtr hWnd = IntPtr.Zero;
+	foreach (Process process in Process.GetProcesses()) {
+		if (process.MainWindowTitle.Contains(title)) {
+			hWnd = process.MainWindowHandle;
+		}
+	}
+	return hWnd;
+}
+
+
+
+
+<m>[PROCESS] ЗАПУСК ПРОЦЕССА В ОПРЕДЕЛЕННЫХ ПОЗИЦИИ И РАЗМЕРЕ</m>
+[DllImport("user32.dll")] static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndAfter, int x, int y, int width, int height, int flags);
+public Form1() {
+	InitializeComponent();
+	ProcessStartInfo processStartInfo = new ProcessStartInfo("PROGRAM_NAME");
+	processStartInfo.WindowStyle = ProcessWindowStyle.Normal;
+	Process process = Process.Start(processStartInfo);
+	process.WaitForInputIdle();
+	SetWindowPos(process.MainWindowHandle, 0, 200, 100, 500, 500, 0);
+}
+
+
+
+
+<m>[PROCESS] ИЗМЕНИТЬ ИМЯ ОКНА</m>
+[DllImport("user32.dll")] static extern int SetWindowText(IntPtr hWnd, string title);
+public Form1() {
+	IntPtr hWnd = IntPtr.Zero;
+	Process[] processList = Process.GetProcessesByName("PROGRAM_NAME");
+	if (processList.Length &gt; 0) {
+		hWnd = processList[0].MainWindowHandle;
+	}
+	SetWindowText(hWnd, "TITLE_NAME");
+}
+
+
+
+
+<m>[PROCESS] СКРЫТЬ ПРИЛОЖНИЕ ИЗ ПАНЕЛИ ЗАДАЧ</m>
+[DllImport("user32.dll")] static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+[DllImport("user32.dll")] static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+[DllImport("user32.dll")] static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+public Form1() {
+	InitializeComponent();
+	ShowWindow(hWnd, 0x00);
+	SetWindowLong(hWnd, -0x14, GetWindowLong(hWnd, -0x14) | 0x0080);
+	ShowWindow(hWnd, 0x05);
+}
+
+
+
+
+<m>[FILES] ОБЩИЕ КОМАНДЫ</m>
+File.Create(fileName);								//создать файл
+File.Delete(fileName);								//удалить файл
+File.Move(fileName1, fileName2);					//переместить файл в другую директорию
+File.Exists(fileName)								//true - файл существует
+File.ReadAllText(fileName)							//вернуть весь текст из файла
+File.ReadAllLines(fileName)							//вернуть все строки из файла
+File.ReadAllBytes(fileName)							//вернуть все байты из файла
+File.WriteAllText(fileName, text);					//записать весь текст в файл
+File.WriteAllLines(fileName, lines);				//записать все строки в файл
+File.WriteAllBytes(fileName, bytes);				//записать все байты в файл
+File.AppendAllText(fileName, text);					//добавить текст в файл
+File.AppendAllLines(fileName, lines);				//добавить все строки в файл
+StreamReader fin = new StreamReader(fileName);		//объявить переменную считывания из файла
+StreamWriter fout = new StreamWriter(fileName);		//объявить переменную записи в файл
+fin.ReadToEnd();									//вернуть весь текст из файла
+fin.ReadLine();										//вернуть строку из файла
+
+
+
+
+<m>[FILES] ОЧИСТИТЬ ПАПКУ</m>
+DirectoryInfo directoryInfo = new DirectoryInfo("PATH");
+foreach (FileInfo file in directoryInfo.GetFiles()) {
+	file.Delete();
+}
+foreach (DirectoryInfo dir in directoryInfo.GetDirectories()) {
+	dir.Delete(true);
+}
+
+
+
+
+<m>[STRING] ОБЩИЕ КОМАНДЫ</m>
+text.Contains(str)				//true - строка содержит подстроку
+text.IndexOf(str)				//вернуть индекс первого вхождения подстроки
+text.IndexOf(str, index)		//вернуть индекс первого вхождения подстроки [от индекса]
+text.IndexOf(str, index, n)		//вернуть индекс первого вхождения подстроки [от индекса; позиций]
+text.LastIndexOf(str)			//вернуть индекс последнего вхождения подстроки
+text.LastIndexOf(str, index)	//вернуть индекс последнего вхождения подстроки [от индекса]
+text.LastIndexOf(str, index, n)	//вернуть индекс последнего вхождения подстроки [от индекса; позиций]
+text.ToUpper()					//вернуть строку с верхним регистром
+text.ToLower()					//вернуть строку с нижним регистром
+text.Replace(str1, str2)		//вернуть строку с заменой всех подстрок на подстроку
+text.Insert(index, str)			//вернуть строку с вставкой подстроки [от индекса]
+text.Remove(index)				//вернуть строку с удалением символов [от индекса]
+text.Remove(index, n)			//вернуть строку с удалением символов [от индекса; позиций]
+
+
+
+
+<m>[WMP] ОБЩИЕ КОМАНДЫ</m>
+WMPLib.WindowsMediaPlayer windowsMediaPlayer = new WMPLib.WindowsMediaPlayer();	//объявить wmp
+windowsMediaPlayer.controls.play();												//воспроизвести wmp
+windowsMediaPlayer.controls.stop();												//остановить wmp
+windowsMediaPlayer.URL = url;													//указать путь к файлу
+windowsMediaPlayer.settings.volume = 10;										//присвоить громкость wmp
+windowsMediaPlayer.settings.setMode("loop", true);								//зациклить воспроизведение wmp
+windowsMediaPlayer.settings.setMode("shuffle", true);							//перемешать плейлист wmp
+
+
+
+
+<m>[SELENIUM] FIREFOX ОБЩИЕ КОМАНДЫ</m>
+FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();	//объявить firefox_driver_service
+FirefoxOptions options = new FirefoxOptions();								//объявить firefox_options
+FirefoxProfileManager profileManager = new FirefoxProfileManager();			//объявить firefox_profile_manager
+FirefoxProfile profile = profileManager.GetProfile("PROFILE_NAME");
+options.Profile = profile;													//связать с profile_name
+options.AddArgument("--kiosk");												//установить полный экран (f11)
+service.HideCommandPromptWindow = true;										//скрыть консоль selenium
+IWebDriver driver = new FirefoxDriver(service, options);					//объявить i_web_driver
+driver.Navigate().GoToUrl("URL");											//перейти на сайт через url
+
+
+
+
+<m>[CEFSHARP] УСТАНОВИТЬ ПУТЬ ХРАНЕНИЯ ДАННЫХ</m>
+public Form1() {
+	InitializeComponent();
+	CefSettings cefSettings = new CefSettings();
+	cefSettings.CachePath = "PATH";
+	Cef.Initialize(cefSettings);
+}
+
+
+
+
+<m>[CEFSHARP] ОТКЛЮЧИТЬ JAVASCRIPT</m>
+public Form1() {
+	InitializeComponent();
+	BrowserSettings browserSettings = new BrowserSettings();
+	browserSettings.Javascript = CefState.Disabled;
+	ChromiumWebBrowser1.BrowserSettings = browserSettings;
+}
+
+
+
+
+<m>[CEFSHARP] ВЕРНУТЬ ИСХОДНЫЙ КОД САЙТА</m>
+BeginInvoke((Action) (async () => {
+	TextBox1.Text = await chromiumWebBrowser.GetSourceAsync();
+}));
+
+
+
+
+<m>[MAGICKIMAGE] ФОРМАТИРОВАТЬ BITMAP В MAGICK IMAGE</m>
+MagickFactory magicFactory = new MagickFactory();
+MagickImage magicImage = new MagickImage(magicFactory.Image.Create(bitmap));
+
+
+
+
+<m>[MAGICKIMAGE] СОЗДАТЬ GIF ФАЙЛ</m>
+MagickImageCollection collection = new MagickImageCollection();
+collection.Add("1.jpg");
+collection[0].AnimationDelay = 10;
+collection.Add("2.jpg");
+collection[1].AnimationDelay = 10;
+collection.Write("result.gif");
+
+
+
+
+<m>[OTHER] СОХРАНИТЬ СКРИН ЭКРАНА</m>
+Bitmap prtSc = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+Graphics graphics = Graphics.FromImage(prtSc as Image);
+graphics.CopyFromScreen(0, 0, 0, 0, prtSc.Size);
+Bitmap resized = new Bitmap(prtSc, new Size(prtSc.Width / 4, prtSc.Height / 4));
+resized.Save("1.jpg", ImageFormat.Jpeg);
+
+
+
+
+<m>[OTHER] РЕГИСТРАЦИЯ ГЛОБАЛЬНЫХ КЛАВИШ</m>
+[DllImport("user32.dll")] static extern bool RegisterHotKey(IntPtr hWnd, int id, int modifiers, int key);
+protected override void WndProc(ref Message message) {
+	if (message.Msg == 0x0312) {
+		if (message.WParam.ToInt32() == 1) {
+			return;
+		}
+	}
+	base.WndProc(ref message);
+}
+//0x0000 - none
+//0x0001 - alt
+//0x0002 - ctrl
+//0x0004 - shift
+//0x0008 - win
+public Form1() {
+	InitializeComponent();
+	RegisterHotKey(Handle, 1, 0x0001, (int) Keys.F4);
+}
+
+
+
+
+<m>[OTHER] РЕГИСТРАЦИЯ ЗАЖАТИЯ ГЛОБАЛЬНЫХ КЛАВИШ</m>
+[DllImport("user32.dll")] static extern short GetAsyncKeyState(Keys key);
+void Timer1_Tick(object sender, EventArgs e) {
+	byte[] keyState = BitConverter.GetBytes(GetAsyncKeyState(Keys.F1));
+	//if (keyState[0] == 1) - клавиша нажата
+	//if (keyState[1] == 0x80) - клавиша зажата
+}
+
+
+
+
+<m>[OTHER] ЗАМЕНА ЦВЕТА ВЫДЕЛЯЕМОГО ТЕКСТА</m>
+//настройка изменяет цвет выделяемого текста всей системы
+//настройка сбрасывается после перезагрузки системы
+const int COLOR_HIGHLIGHT = 13;
+const int COLOR_HIGHLIGHTTEXT = 14;
+[DllImport("user32.dll")] static extern bool SetSysColors(int cElements, int[] lpaElements, uint[] lpaRgbValues);
+void ChangeColorOfSelectedText(Color highlightColor, Color highlightTextColor) {
+	int[] elements = {
+		COLOR_HIGHLIGHT
+	};
+	List&lt;uint&gt; colors = new List&lt;uint&gt;();
+	colors.Add((uint) ColorTranslator.ToWin32(highlightColor));
+	SetSysColors(elements.Length, elements, colors.ToArray());
+	elements[0] = COLOR_HIGHLIGHTTEXT;
+	colors.Clear();
+	colors.Add((uint) ColorTranslator.ToWin32(highlightTextColor));
+	SetSysColors(elements.Length, elements, colors.ToArray());
+}
+
+
+
+
+<m>[OTHER] ОТКРЫТЬ ДИАЛОГОВОЕ ОКНО ОТКРЫТИЯ/ЗАКРЫТИЯ ФАЙЛА</m>
+//открыть диалоговое окно открытия файла
+if (OpenFileDialog1.ShowDialog() != DialogResult.Cancel) {
+	return File.ReadAllText(OpenFileDialog1.FileName);
+}
+//открыть диалоговое окно сохранения файла
+if (SaveFileDialog1.ShowDialog() != DialogResult.Cancel) {
+	File.WriteAllText(SaveFileDialog1.FileName, text);
+}
+
+
+
+
+<m>[OTHER] ОТКРЫТЬ ФАЙЛ С ПОМОЩЬЮ</m>
+public Form1() {
+	InitializeComponent();
+	string[] cmdLine = Environment.GetCommandLineArgs();
+	string fileFormat = "";
+	if (cmdLine.Length > 1) {
+		fileFormat = cmdLine[1].Remove(0, cmdLine[1].LastIndexOf('.'));
+	}
+	if (fileFormat == ".txt" || fileFormat == ".html") {
+		TextBox1.Text = File.ReadAllText(cmdLine[1], Encoding.Default);
+	}
+}
+
+
+
+
+<m>[OTHER] ПРОЗРАЧНАЯ ПАНЕЛЬ</m>
+public partial class TransparentPanel: Panel {
+	protected override CreateParams CreateParams {
+		get {
+			CreateParams createParams = base.CreateParams;
+			createParams.ExStyle |= 0x00000020;
+			return createParams;
+		}
+	}
+	protected override void OnPaintBackground(PaintEventArgs e) {
+		//base.OnPaintBackground(e);
+	}
+}
+
+
+
+
+<m>[OTHER] ЗАРЕГЕСТРИРОВАТЬ В СИСТЕМЕ НОВЫЙ ФОРМАТ ФАЙЛА И ДОБАВИТЬ ЕГО В КОНТЕСТНОЕ МЕНЮ "NEW" WINDOWS</m>
+//содержание .reg файла
+//формат файла - .te
+Windows Registry Editor Version 5.00
+[HKEY_CLASSES_ROOT\.te]
+@="TextEdit"
+[HKEY_CLASSES_ROOT\.te\ShellNew]
+"NullFile"=""
+[HKEY_CLASSES_ROOT\TextEdit]
+@="TextEdit File"
+
+
+
+
+<m>[OTHER] ПОДТВЕРЖДЕНИЕ ВЫХОДА</m>
+void Form1_FormClosing(object sender, FormClosingEventArgs e) {
+	MessageBox.Show("Exit without save?", "Exit", MessageBoxButtons.YesNo) == DialogResult.No) {
+		e.Cancel = true;
+	}
+}
+
+
+
+
+<m>[OTHER] ТОЧНЫЙ ТАЙМЕР</m>
+class AccurateTimer {
+	private delegate void TimerEventDel(int id, int msg, IntPtr user, int dw1, int dw2);
+	[DllImport("winmm.dll")] static extern int timeBeginPeriod(int milliseconds);
+	[DllImport("winmm.dll")] static extern int timeEndPeriod(int milliseconds);
+	[DllImport("winmm.dll")] static extern int timeSetEvent(int delay, int resolution, TimerEventDel handler, IntPtr user, int eventType);
+	[DllImport("winmm.dll")] static extern int timeKillEvent(int id);
+	Action action;
+	Form form;
+	TimerEventDel handler;
+	int timerId;
+	void TimerCallback(int id, int msg, IntPtr user, int dw1, int dw2) {
+		if (timerId != 0) {
+			form.BeginInvoke(action);
+		}
+	}
+	public AccurateTimer(Form form, Action action, int delay) {
+		this.action = action;
+		this.form = form;
+		timeBeginPeriod(1);
+		handler = new TimerEventDel(TimerCallback);
+		timerId = timeSetEvent(delay, 0, handler, IntPtr.Zero, 1);
+	}
+	public void Stop() {
+		int error = timeKillEvent(timerId);
+		timeEndPeriod(1);
+		Thread.Sleep(100);
+	}
+}
+AccurateTimer accurateTimer;
+public Form1() {
+	InitializeComponent();
+	accurateTimer = new AccurateTimer(this, new Action(AccurateTimer_Tick), 1000);
+}
+void Form1_FormClosing(object sender, FormClosingEventArgs e) {
+	accurateTimer.Stop();
+}
+</div>
+</body>
+</html>
